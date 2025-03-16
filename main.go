@@ -10,9 +10,9 @@ import (
 func main() {
 	n := maelstrom.NewNode()
 
+	handlers.HandleBroadcast(n)
 	n.Handle("echo", handlers.GetEchoHandler(n))
 	n.Handle("generate", handlers.GetUniqueIDHandler(n))
-	n.Handle("broadcast", handlers.GetBroadcastHandler(n))
 
 	if err := n.Run(); err != nil {
 		log.Fatalf("Failed to run the handler: %v", err)

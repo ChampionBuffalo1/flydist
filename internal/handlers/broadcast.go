@@ -1,12 +1,13 @@
 package handlers
 
-import maelstrom "github.com/jepsen-io/maelstrom/demo/go"
+import (
+	"github.com/ChampionBuffalo1/flydist/internal/handlers/broadcast"
+	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
+)
 
-type broadcastMessage struct {
-}
-
-func GetBroadcastHandler(node *maelstrom.Node) maelstrom.HandlerFunc {
-	return func(msg maelstrom.Message) error {
-		return nil
-	}
+func HandleBroadcast(node *maelstrom.Node) {
+	state := broadcast.NewBroadcastState()
+	node.Handle("read", broadcast.GetReadHandler(node, state))
+	node.Handle("topology", broadcast.GetTopologyHandler(node, state))
+	node.Handle("broadcast", broadcast.GetBroadcastHandler(node, state))
 }

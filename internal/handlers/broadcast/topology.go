@@ -1,4 +1,4 @@
-package handlers
+package broadcast
 
 import (
 	"encoding/json"
@@ -8,20 +8,18 @@ import (
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
-type echoMessage struct {
-	ID   int    `json:"msg_id"`
-	Echo string `json:"echo"`
+type topologyMessage struct {
+	Topology map[string][]string `json:"topology,omitempty"`
 	models.TypeMessage
 }
 
-// echo dist sys challenge: https://fly.io/dist-sys/1
-func GetEchoHandler(node *maelstrom.Node) maelstrom.HandlerFunc {
+func GetTopologyHandler(node *maelstrom.Node, state *BroadcastState) maelstrom.HandlerFunc {
 	return func(msg maelstrom.Message) error {
-		var body echoMessage
+		var body topologyMessage
 		if err := json.Unmarshal(msg.Body, &body); err != nil {
 			return err
 		}
-		body.Type = constants.EchoOK
-		return node.Reply(msg, body)
+		state.AddTopology(body.Topology)
+		return node.Reply(msg, models.NewTypeResponse(constants.TopologyOK))
 	}
 }
