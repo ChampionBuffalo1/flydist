@@ -10,7 +10,7 @@ import (
 func main() {
 	n := maelstrom.NewNode()
 
-	handlers.HandleBroadcast(n)
+	handlers.AddBroadcastHandlers(n)
 	n.Handle("echo", handlers.GetEchoHandler(n))
 	n.Handle("generate", handlers.GetUniqueIDHandler(n))
 

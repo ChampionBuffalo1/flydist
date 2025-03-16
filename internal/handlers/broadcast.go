@@ -5,7 +5,7 @@ import (
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
-func HandleBroadcast(node *maelstrom.Node) {
+func AddBroadcastHandlers(node *maelstrom.Node) {
 	state := broadcast.NewBroadcastState()
 	node.Handle("read", broadcast.GetReadHandler(node, state))
 	node.Handle("topology", broadcast.GetTopologyHandler(node, state))
